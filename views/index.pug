@@ -3,3 +3,12 @@ extends layout
 block content
   h1= title
   p Welcome to #{title}
+  p Proceed to login 
+  form(action="", method="post") 
+    label(for="name") Name: 
+    input(required type="text" name='name' id='name')
+    label(for="password") Password: 
+    input(required type="password" name='password' id='password')   
+    button(type="submit") Login
+  p Or make an account: 
+  a(href='/signup') Signup
