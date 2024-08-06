@@ -9,12 +9,15 @@ const { PrismaSessionStore } = require('@quixo3/prisma-session-store');
 const passport = require("passport");
 const LocalStrategy = require("passport-local").Strategy;
 const bcrypt = require('bcryptjs');
+const multer  = require('multer')
+const upload = multer({ dest: 'uploads/' })
 
 const { PrismaClient } = require('@prisma/client');
 const prisma = new PrismaClient();
 
 const indexRouter = require('./routes/index');
 const authRouter = require('./routes/auth');
+const fileRouter = require('./routes/file');
 
 const app = express();
 
@@ -83,6 +86,7 @@ passport.deserializeUser(async (id, done) => {
 
 app.use('/', indexRouter);
 app.use('/', authRouter);
+app.use('/', fileRouter);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
