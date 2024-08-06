@@ -1,16 +1,16 @@
 extends layout 
 
 block content 
-    h1=title 
+    h2=title 
     form(action="", method="post") 
-        label(for="name") Name: 
-        input(required type="text" name='name' id='name' placeholder='janedough456')
-        label(for="password") Password: 
+        label(for="username") #[strong Username]: 
+        input(required type="text" name='username' id='username' value=(username === undefined ? '' : username))
+        label(for="password") #[strong Password]: 
         input(required type="password" name='password' id='password')
-        label(for="confirm-password") Confirm password: 
+        label(for="confirm-password") #[strong Confirm password]: 
         input(required type="password" name='confirm-password' id='confirm-password')
         button(type="submit") Submit   
     if errors 
-        for error in errors 
-            ul 
+        ul
+            for error in errors 
                 li=error.msg

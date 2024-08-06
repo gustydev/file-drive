@@ -1,14 +1,13 @@
 extends layout
 
 block content
-  h1= title
-  p Welcome to #{title}
-  p Proceed to login 
-  form(action="", method="post") 
-    label(for="name") Name: 
-    input(required type="text" name='name' id='name')
-    label(for="password") Password: 
-    input(required type="password" name='password' id='password')   
-    button(type="submit") Login
-  p Or make an account: 
-  a(href='/signup') Signup
+  if user
+    p Welcome back to #{title}, #{user.name}! You were created at #{user.createdAt}!
+    a(href='/logout') Logout
+  else 
+    p Welcome to #{title}. Proceed to login
+    a(href='/login') Login
+  if errors 
+    ul
+      for error in errors
+        li=error.msg

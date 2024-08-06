@@ -1,0 +1,16 @@
+extends layout 
+
+block content 
+    p Welcome to gDrive! Proceed to login 
+    form(action="", method="post") 
+      label(for="username") #[strong Username]: 
+      input(required type="text" name='username' id='username')
+      label(for="password") #[strong Password]: 
+      input(required type="password" name='password' id='password')   
+      button(type="submit") Login
+    p Or make an account for free: 
+    a(href='/signup') Signup
+    if errors 
+        ul 
+            for error in errors 
+                li=error
