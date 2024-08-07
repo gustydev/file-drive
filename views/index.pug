@@ -2,7 +2,7 @@ extends layout
 
 block content
   if user
-    p Welcome back to #{title}, #{user.name}! You were created at #{user.createdAt}!
+    p Welcome back to #{title}, #{user.name}!
     a(href='/logout') Logout
     form(action="/upload", method="post" enctype="multipart/form-data")
       label(for="file") File: 
