@@ -2,7 +2,7 @@ const { body, validationResult } = require("express-validator");
 const asyncHandler = require("express-async-handler");
 const bcrypt = require('bcryptjs')
 const passport = require("passport");
-const prisma = require('../prisma/prisma')
+const prisma = require('../prisma/client')
 
 exports.signupGet = function(req, res, next) {
     res.render('signup', {title: 'Sign up'})

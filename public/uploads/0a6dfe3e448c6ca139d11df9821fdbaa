@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title><%= title %></title>
+    <link rel='stylesheet' href='/stylesheets/style.css' />
+  </head>
+  <body>
+    <h1><%= title %></h1>
+    <p>Welcome to the <%= title %>! Leave your message below</p>
+    <div class="messages">
+      <% messages.forEach(function(msg) { %>
+        <div class="message">
+          <div class="message-user"><%= msg.user %>:</div>
+          <div class="message-text"><%= msg.text %></div>
+          <div class="message-date"><%= msg.added.toLocaleString() %></div>
+        </div>
+      <% }); %>
+    </div>
+    <form action="/" method="POST">
+      <input type="text" name="user" placeholder="username" required>
+      <input type="text" name="text" placeholder="text" required>
+      <button type="submit">Send</button>
+    </form>
+    <% if (locals.errors) { %>
+      <div class="error">
+        <p style="font-weight: bold;">Input error:</p>
+        <ul>
+          <% errors.array().forEach((error) => { %>
+            <li><%= error.msg %></li>
+          <% }) %>
+        </ul>
+      </div>
+    <% } %>
+  </body>
+</html>

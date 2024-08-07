@@ -1,7 +1,7 @@
 const multer  = require('multer')
 const upload = multer({ dest: './public/uploads/' })
 const asyncHandler = require("express-async-handler");
-const prisma = require('../prisma/prisma');
+const prisma = require('../prisma/client');
 
 exports.fileUpload = [
     upload.single('file'),
@@ -15,7 +15,7 @@ exports.fileUpload = [
                     type: req.file.mimetype,
                     size: req.file.size,
                     url: req.file.path, // Later this should be a cloudinary url probably
-                    folderId: Number(req.body.folder) || undefined
+                    folderId: req.body.folder || undefined
                 }
             })
             console.log(file)

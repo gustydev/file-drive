@@ -9,8 +9,7 @@ const { PrismaSessionStore } = require('@quixo3/prisma-session-store');
 const passport = require("passport");
 const LocalStrategy = require("passport-local").Strategy;
 const bcrypt = require('bcryptjs');
-const multer  = require('multer')
-const prisma = require('./prisma/prisma');
+const prisma = require('./prisma/client');
 
 const indexRouter = require('./routes/index');
 const authRouter = require('./routes/auth');
