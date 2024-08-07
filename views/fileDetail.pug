@@ -1,0 +1,13 @@
+extends layout 
+
+block content 
+    h2=file.name
+    ul 
+        li Uploaded at: #{file.uploadedAt}
+        li Type: #{file.type}
+        li Size: #{file.size}
+        li Folder: #{file.folder ? file.folder : 'none'}
+    form(action=`/file/${file.id}/download`, method="post") 
+        label(for="fileId")
+        input(type="hidden" name='fileId' value=file.id) 
+        button(type='submit') Download file

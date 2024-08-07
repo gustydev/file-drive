@@ -22,12 +22,20 @@ block content
         p #[strong Your Files]
         if user.files.length 
           for file in user.files 
-            ul.file=file.name
+            ul.file
+              li
+                a(href=`/file/${file.id}`)=file.name 
               li.file-uploadedAt=file.uploadedAt 
               li.file-size=file.size
+              if file.folder 
+                li.file-folder=file.folder
+              form(action=`/file/${file.id}/download` method='post')
+                label(for="fileId")  
+                input(type="hidden" value=file.id name='fileId')
+                button(type="submit") Download file
         else 
           p No files found
-        form(action="/upload", method="post" enctype="multipart/form-data")
+        form(action="/file/upload", method="post" enctype="multipart/form-data")
           label(for="file") Upload a file: 
           input(type="file" name='file' id='file' required)
           button(type="submit") Submit    
