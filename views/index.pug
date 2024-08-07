@@ -4,14 +4,33 @@ block content
   if user
     p Welcome back to #{title}, #{user.name}!
     a(href='/logout') Logout
-    form(action="/upload", method="post" enctype="multipart/form-data")
-      label(for="file") File: 
-      input(type="file" name='file')
-      button(type="submit") Submit    
-    if file 
-      p latest upload:
-      each thing in Object.entries(file)
-        li= thing[0] + ': ' + thing[1]
+    div.main
+      div.folder-container
+        p #[strong Your Folders]
+        if user.folders.length 
+          for folder in user.folders 
+            div.folder=folder.name 
+        else 
+          p No folders
+        form(action="/newfolder", method="post") 
+          label(for="folder") Make a folder: 
+          input(type="text" name='folder' id='folder' placeholder='My folder' required)
+          button(type='submit') Create 
+      div.files
+        p #[strong Your Files]
+        if user.files.length 
+          for file in user.files 
+            ul.file
+              li.file-name=file.name 
+              li.file-type=file.type 
+              li.file-uploadedAt=file.uploadedAt 
+              li.file-size=file.size
+        else 
+          p No files found
+        form(action="/upload", method="post" enctype="multipart/form-data")
+          label(for="file") Upload a file: 
+          input(type="file" name='file' id='file' required)
+          button(type="submit") Submit    
   else 
     p Welcome to #{title}. Proceed to login
     a(href='/login') Login

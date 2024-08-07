@@ -1,18 +1,26 @@
 const multer  = require('multer')
 const upload = multer({ dest: './public/uploads/' })
+const asyncHandler = require("express-async-handler");
+const { PrismaClient } = require('@prisma/client')
+const prisma = new PrismaClient()
 
 exports.filePost = [
     upload.single('file'),
 
-    function(req, res, next) {
+    asyncHandler(async function(req, res, next) {
         if (req.file) {
-            res.render('index', {
-                title: 'gDrive',
-                user: req.user,
-                file: req.file
+            const file = await prisma.file.create({
+                data: {
+                    ownerId: req.user.id,
+                    name: req.file.originalname,
+                    type: req.file.mimetype,
+                    size: req.file.size,
+                    url: req.file.path
+                }
             })
-            // this will obviously be replaced later
+            console.log(file)
         }
-    }
+        res.redirect('/');
+    })
 ]
 

@@ -36,11 +36,11 @@ exports.signupPost = [
                         return next(err)
                     }
 
-                    const user = await prisma.user.create({
+                    await prisma.user.create({
                         data: {
                             name: req.body.username,
-                            password: hashedPass
-                        }
+                            password: hashedPass,
+                        },
                     });
                     res.redirect('/login');
                 })
