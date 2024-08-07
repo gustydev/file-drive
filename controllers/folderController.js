@@ -1,7 +1,6 @@
 const { body, validationResult } = require("express-validator");
 const asyncHandler = require("express-async-handler");
-const { PrismaClient } = require('@prisma/client')
-const prisma = new PrismaClient()
+const prisma = require('../prisma/prisma')
 
 exports.viewFolderGet = asyncHandler(async function(req,res,next) {
     const folder = await prisma.folder.findUnique({ where: {id: Number(req.params.id)}, include: {files: true} });

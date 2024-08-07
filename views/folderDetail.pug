@@ -6,16 +6,14 @@ block content
         p 1 file 
     else
         p=`${folder.files.length} files`
+    if folder.files.length 
+        p Total size: #{folder.totalSize}
     for file in folder.files 
         ul.file
             li
                 a(href=`/file/${file.id}`)=file.name 
-            li.file-uploadedAt=file.uploadedAt 
-            li.file-size=file.size
-            form(action=`/file/${file.id}/download` method='post')
-            label(for="fileId")  
-            input(type="hidden" value=file.id name='fileId')
-            button(type="submit") Download file
+            li.file-size=file.sizeFormatted
+            li.file-uploadedAt=file.uploadedAt.toLocaleString() 
     form(action="/file/upload", method="post" enctype="multipart/form-data")
         label(for="file") Upload to folder: 
         input(type="file" name='file' id='file' required)

@@ -13,7 +13,8 @@ block content
               li 
                 a(href=`/folder/${folder.id}`)=folder.name 
               li.folder-size=(folder.files.length === 1 ? '1 file' : folder.files.length + ' files')
-              li.folder-createdAt=folder.createdAt
+              li.folder-createdAt=folder.createdAt.toLocaleString()
+              li.folder-totalSize=folder.totalSize
         else 
           p No folders
         form(action="/folder/new", method="post") 
@@ -22,19 +23,17 @@ block content
           button(type='submit') Create 
       div.files
         p #[strong Your Files]
+        - console.log(user.files)
         if user.files.length 
           for file in user.files 
+          
             ul.file
               li
                 a(href=`/file/${file.id}`)=file.name 
-              li.file-uploadedAt=file.uploadedAt 
-              li.file-size=file.size
+              li.file-uploadedAt=file.uploadedAt.toLocaleString()
+              li.file-size=file.sizeFormatted
               if file.folder 
                 li.file-folder Folder: #[a(href=`/folder/${file.folder.id}`)=file.folder.name] 
-              form(action=`/file/${file.id}/download` method='post')
-                label(for="fileId")  
-                input(type="hidden" value=file.id name='fileId')
-                button(type="submit") Download file
         else 
           p No files found
         form(action="/file/upload", method="post" enctype="multipart/form-data")

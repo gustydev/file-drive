@@ -10,10 +10,7 @@ const passport = require("passport");
 const LocalStrategy = require("passport-local").Strategy;
 const bcrypt = require('bcryptjs');
 const multer  = require('multer')
-const upload = multer({ dest: 'uploads/' })
-
-const { PrismaClient } = require('@prisma/client');
-const prisma = new PrismaClient();
+const prisma = require('./prisma/prisma');
 
 const indexRouter = require('./routes/index');
 const authRouter = require('./routes/auth');

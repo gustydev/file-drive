@@ -3,9 +3,9 @@ extends layout
 block content 
     h2=file.name
     ul 
-        li Uploaded at: #{file.uploadedAt}
+        li Uploaded at #{file.uploadedAt.toLocaleString()}
         li Type: #{file.type}
-        li Size: #{file.size}
+        li Size: #{file.sizeFormatted}
         if file.folder 
             li Folder: #[a(href=`/folder/${file.folder.id}`)=file.folder.name]
         else

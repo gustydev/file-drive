@@ -1,8 +1,7 @@
 const multer  = require('multer')
 const upload = multer({ dest: './public/uploads/' })
 const asyncHandler = require("express-async-handler");
-const { PrismaClient } = require('@prisma/client')
-const prisma = new PrismaClient()
+const prisma = require('../prisma/prisma');
 
 exports.fileUpload = [
     upload.single('file'),
