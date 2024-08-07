@@ -6,7 +6,10 @@ block content
         li Uploaded at: #{file.uploadedAt}
         li Type: #{file.type}
         li Size: #{file.size}
-        li Folder: #{file.folder ? file.folder : 'none'}
+        if file.folder 
+            li Folder: #[a(href=`/folder/${file.folder.id}`)=file.folder.name]
+        else
+            li Folder: none
     form(action=`/file/${file.id}/download`, method="post") 
         label(for="fileId")
         input(type="hidden" name='fileId' value=file.id) 

@@ -4,7 +4,7 @@ block content
     h2=title 
     form(action="", method="post") 
         label(for="username") #[strong Username]: 
-        input(required type="text" name='username' id='username' value=(username === undefined ? '' : username))
+        input(required type="text" name='username' id='username' value=(username || ''))
         label(for="password") #[strong Password]: 
         input(required type="password" name='password' id='password')
         label(for="confirm-password") #[strong Confirm password]: 

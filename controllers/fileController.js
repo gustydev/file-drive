@@ -4,7 +4,7 @@ const asyncHandler = require("express-async-handler");
 const { PrismaClient } = require('@prisma/client')
 const prisma = new PrismaClient()
 
-exports.newFilePost = [
+exports.fileUpload = [
     upload.single('file'),
 
     asyncHandler(async function(req, res, next) {
@@ -15,17 +15,22 @@ exports.newFilePost = [
                     name: req.file.originalname,
                     type: req.file.mimetype,
                     size: req.file.size,
-                    url: req.file.path // Later this should be a cloudinary url probably
+                    url: req.file.path, // Later this should be a cloudinary url probably
+                    folderId: Number(req.body.folder) || undefined
                 }
             })
             console.log(file)
         }
-        res.redirect('/');
+        if (req.body.folder) {
+            res.redirect(`/folder/${req.body.folder}`);
+        } else {
+            res.redirect('/')
+        }
     })
 ]
 
 exports.fileDetailGet = asyncHandler(async function(req, res, next) {
-    const file = await prisma.file.findUnique({where: {id: req.params.id}});
+    const file = await prisma.file.findUnique({where: {id: req.params.id}, include: {folder: true}});
     res.render('fileDetail', {
         file: file
     })

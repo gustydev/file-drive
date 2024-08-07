@@ -9,8 +9,10 @@ block content
         p #[strong Your Folders]
         if user.folders.length 
           for folder in user.folders 
-            ul.folder=folder.name
-              li.folder-size=folder.size + ' file(s)'
+            ul.folder
+              li 
+                a(href=`/folder/${folder.id}`)=folder.name 
+              li.folder-size=(folder.files.length === 1 ? '1 file' : folder.files.length + ' files')
               li.folder-createdAt=folder.createdAt
         else 
           p No folders
@@ -28,7 +30,7 @@ block content
               li.file-uploadedAt=file.uploadedAt 
               li.file-size=file.size
               if file.folder 
-                li.file-folder=file.folder
+                li.file-folder Folder: #[a(href=`/folder/${file.folder.id}`)=file.folder.name] 
               form(action=`/file/${file.id}/download` method='post')
                 label(for="fileId")  
                 input(type="hidden" value=file.id name='fileId')

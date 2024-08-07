@@ -1,0 +1,24 @@
+extends layout 
+
+block content 
+    h2=folder.name
+    if folder.files.length === 1
+        p 1 file 
+    else
+        p=`${folder.files.length} files`
+    for file in folder.files 
+        ul.file
+            li
+                a(href=`/file/${file.id}`)=file.name 
+            li.file-uploadedAt=file.uploadedAt 
+            li.file-size=file.size
+            form(action=`/file/${file.id}/download` method='post')
+            label(for="fileId")  
+            input(type="hidden" value=file.id name='fileId')
+            button(type="submit") Download file
+    form(action="/file/upload", method="post" enctype="multipart/form-data")
+        label(for="file") Upload to folder: 
+        input(type="file" name='file' id='file' required)
+        label(for="folder")
+        input(type="hidden" value=folder.id name='folder') 
+        button(type="submit") Submit    
