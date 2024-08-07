@@ -18,6 +18,7 @@ const prisma = new PrismaClient();
 const indexRouter = require('./routes/index');
 const authRouter = require('./routes/auth');
 const fileRouter = require('./routes/file');
+const folderRouter = require('./routes/folder');
 
 const app = express();
 
@@ -87,6 +88,7 @@ passport.deserializeUser(async (id, done) => {
 app.use('/', indexRouter);
 app.use('/', authRouter);
 app.use('/', fileRouter);
+app.use('/', folderRouter);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {

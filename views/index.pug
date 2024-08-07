@@ -9,20 +9,20 @@ block content
         p #[strong Your Folders]
         if user.folders.length 
           for folder in user.folders 
-            div.folder=folder.name 
+            ul.folder=folder.name
+              li.folder-size=folder.size + ' file(s)'
+              li.folder-createdAt=folder.createdAt
         else 
           p No folders
-        form(action="/newfolder", method="post") 
+        form(action="/folder/new", method="post") 
           label(for="folder") Make a folder: 
-          input(type="text" name='folder' id='folder' placeholder='My folder' required)
+          input(type="text" name='folder' id='folder' placeholder='My folder name' required)
           button(type='submit') Create 
       div.files
         p #[strong Your Files]
         if user.files.length 
           for file in user.files 
-            ul.file
-              li.file-name=file.name 
-              li.file-type=file.type 
+            ul.file=file.name
               li.file-uploadedAt=file.uploadedAt 
               li.file-size=file.size
         else 
