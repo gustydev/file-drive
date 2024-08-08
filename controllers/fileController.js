@@ -29,9 +29,10 @@ exports.fileUpload = [
 ]
 
 exports.fileDetailGet = asyncHandler(async function(req, res, next) {
-    const file = await prisma.file.findUnique({where: {id: req.params.id}, include: {folder: true}});
+    const file = await prisma.file.findUnique({where: {id: req.params.id}, include: {folder: true, owner: true}});
     res.render('fileDetail', {
-        file: file
+        file: file,
+        user: req.user
     })
 }) 
 

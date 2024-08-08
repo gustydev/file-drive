@@ -1,7 +1,9 @@
 extends layout 
 
 block content 
-    h2=file.name
+    h2 File: #{file.name}
+    if file.owner.id !== user.id 
+        p Owned by #[strong #{file.owner.name}]
     ul 
         li Uploaded at #{file.uploadedAt.toLocaleString()}
         li Type: #{file.type}
@@ -10,7 +12,8 @@ block content
             li Folder: #[a(href=`/folder/${file.folder.id}`)=file.folder.name]
         else
             li Folder: none
-    form(action=`/file/${file.id}/download`, method="post") 
-        label(for="fileId")
-        input(type="hidden" name='fileId' value=file.id) 
-        button(type='submit') Download file
+    if file.owner.id === user.id
+        form(action=`/file/${file.id}/download`, method="post") 
+            label(for="fileId")
+            input(type="hidden" name='fileId' value=file.id) 
+            button(type='submit') Download file

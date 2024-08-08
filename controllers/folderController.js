@@ -3,10 +3,10 @@ const asyncHandler = require("express-async-handler");
 const prisma = require('../prisma/client')
 
 exports.viewFolderGet = asyncHandler(async function(req,res,next) {
-    const folder = await prisma.folder.findUnique({ where: {id: req.params.id}, include: {files: true} });
-    console.log(folder)
+    const folder = await prisma.folder.findUnique({ where: {id: req.params.id}, include: {files: true, owner: true} });
     res.render('folderDetail', {
-        folder: folder
+        folder: folder,
+        user: req.user
     })
 });
 
