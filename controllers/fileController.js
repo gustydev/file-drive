@@ -7,8 +7,8 @@ const upload = multer({ dest: './public/uploads/', limits: {fileSize: maxSize} }
 
 exports.fileDetailGet = asyncHandler(async function(req, res, next) {
     const file = await prisma.file.findUnique({where: {id: req.params.id}, include: {folder: true, owner: true}});
-    const folders = await prisma.folder.findMany();
-
+    const folders = await prisma.folder.findMany({where: {owner: {id: req.user.id}}});
+    
     res.render('fileDetail', {
         file: file,
         user: req.user,
@@ -21,7 +21,7 @@ exports.fileUpload = [
 
     asyncHandler(async function(req, res, next) {
         if (req.file) {
-            const file = await prisma.file.create({
+            await prisma.file.create({
                 data: {
                     ownerId: req.user.id,
                     name: req.file.originalname,

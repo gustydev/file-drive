@@ -2,8 +2,6 @@ extends layout
 
 block content
   if user
-    p Welcome back to #{title}, #{user.name}!
-    a(href='/logout') Logout
     div.main
       div.folder-container
         p #[strong Your Folders]

@@ -8,8 +8,7 @@ block content
       label(for="password") #[strong Password]: 
       input(required type="password" name='password' id='password')   
       button(type="submit") Login
-    p Or make an account for free: 
-    a(href='/signup') Signup
+    p Don't have an account? #[a(href='/signup') Sign up] for free.
     if errors 
         ul 
             for error in errors 
