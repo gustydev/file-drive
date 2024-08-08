@@ -17,7 +17,7 @@ exports.fileDetailGet = asyncHandler(async function(req, res, next) {
 }) 
 
 exports.fileUpload = [
-    upload.single('file'), // Add error handling for files larger than 3MB later
+    upload.single('file'), // Add custom error handling for files larger than 3MB later
 
     asyncHandler(async function(req, res, next) {
         if (req.file) {
@@ -121,6 +121,30 @@ exports.fileMove = [
                 folders: folders,
                 errors: errors.array()
             })
+        }
+    })
+]
+
+exports.fileDelete = [
+    body('fileId').custom(async (value) => {
+        const file = await prisma.file.findUnique({where: {id: value}});
+        if (!file) {
+            throw new Error(`Invalid file ID: ${value}`)
+        }
+    }),
+
+    asyncHandler(async function(req, res, next) {
+        const errors = validationResult(req);
+        
+        if (errors.isEmpty()) {
+            await prisma.file.delete({where: {id: req.body.fileId}});
+            // Add later: remove from cloud hosting as well, not just the database
+        }
+
+        if (req.body.folder) {
+            res.redirect(`/folder/${req.body.folder}`)
+        } else {
+            res.redirect('/')
         }
     })
 ]

@@ -31,6 +31,10 @@ block content
                     optgroup(label='Remove from folder?')
                         option(value='remove') Remove
             button(type="submit") Move
+        form(action=`/file/${file.id}/delete` method='post')
+            label(for="fileId")
+            input(type="hidden" name='fileId' value=file.id)
+            button(type="submit") Delete file
     if errors 
         ul 
             for error in errors 
