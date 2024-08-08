@@ -23,7 +23,6 @@ block content
           button(type='submit') Create 
       div.files
         p #[strong Your Files]
-        - console.log(user.files)
         if user.files.length 
           for file in user.files 
           

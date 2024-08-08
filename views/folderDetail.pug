@@ -1,29 +1,31 @@
 extends layout 
 
 block content 
-    h2 Folder: #{folder.name}
     if folder.owner.id !== user.id 
-        p Owned by #[strong #{folder.owner.name}]
-    if folder.files.length === 1
-        p 1 file 
+        h2 Error 
+        p You are not allowed to view this content.
     else
-        p=`${folder.files.length} files`
-    if folder.files.length 
-        p Total size: #{folder.totalSize}
-    for file in folder.files 
-        ul.file
-            li
-                a(href=`/file/${file.id}`)=file.name 
-            li.file-size=file.sizeFormatted
-            li.file-uploadedAt=file.uploadedAt.toLocaleString() 
-    if folder.owner.id === user.id
-        form(action="/file/upload", method="post" enctype="multipart/form-data")
-            label(for="file") Upload to folder: 
-            input(type="file" name='file' id='file' required)
-            label(for="folder")
-            input(type="hidden" value=folder.id name='folder') 
-            button(type="submit") Submit    
-    if errors 
-        ul 
-            for error in errors 
-                li=error.msg
+        h2 Folder: #{folder.name}
+        if folder.files.length === 1
+            p 1 file 
+        else
+            p=`${folder.files.length} files`
+        if folder.files.length 
+            p Total size: #{folder.totalSize}
+        for file in folder.files 
+            ul.file
+                li
+                    a(href=`/file/${file.id}`)=file.name 
+                li.file-size=file.sizeFormatted
+                li.file-uploadedAt=file.uploadedAt.toLocaleString() 
+        if folder.owner.id === user.id
+            form(action="/file/upload", method="post" enctype="multipart/form-data")
+                label(for="file") Upload to folder: 
+                input(type="file" name='file' id='file' required)
+                label(for="folder")
+                input(type="hidden" value=folder.id name='folder') 
+                button(type="submit") Submit    
+        if errors 
+            ul 
+                for error in errors 
+                    li=error.msg

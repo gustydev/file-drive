@@ -24,7 +24,6 @@ exports.newFolderPost = [
                     ownerId: req.user.id
                 }
             });
-            console.log(folder);
             res.redirect('/');
         } else {
             res.render('index', {
