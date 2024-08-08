@@ -17,3 +17,21 @@ block content
             label(for="fileId")
             input(type="hidden" name='fileId' value=file.id) 
             button(type='submit') Download file
+        form(action=`/file/${file.id}/move`, method="post") 
+            label(for="fileId")
+            input(type="hidden" name='fileId' value=file.id)
+            label(for="folder") Move to folder:   
+            select#folder(name="folder")
+                option(value="") Select a folder...
+                optgroup(label='Folders')
+                    for folder in folders 
+                        if !file.folder || (folder.id !== file.folder.id)
+                            option(value=folder.id)=folder.name  
+                if file.folder
+                    optgroup(label='Remove from folder?')
+                        option(value='remove') Remove from folder
+            button(type="submit") Move
+    if errors 
+        ul 
+            for error in errors 
+                li=error.msg

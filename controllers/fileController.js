@@ -1,6 +1,7 @@
 const multer  = require('multer')
 const upload = multer({ dest: './public/uploads/' })
 const asyncHandler = require("express-async-handler");
+const { body, validationResult } = require("express-validator");
 const prisma = require('../prisma/client');
 
 exports.fileUpload = [
@@ -30,9 +31,12 @@ exports.fileUpload = [
 
 exports.fileDetailGet = asyncHandler(async function(req, res, next) {
     const file = await prisma.file.findUnique({where: {id: req.params.id}, include: {folder: true, owner: true}});
+    const folders = await prisma.folder.findMany();
+
     res.render('fileDetail', {
         file: file,
-        user: req.user
+        user: req.user,
+        folders: folders
     })
 }) 
 
@@ -44,3 +48,46 @@ exports.fileDownload = asyncHandler(async function(req, res, next) {
         }
     })
 }) 
+
+exports.fileMove = [
+    body('folder').custom(async (value) => {
+        if (value === 'remove') {
+            return;
+        }
+        
+        const folder = await prisma.folder.findUnique({where: {id: value}});
+        if (!folder) {
+            throw new Error(`Invalid folder: ${value}`)
+        }
+    }),
+
+    asyncHandler(async function(req, res, next) {
+        const errors = validationResult(req);
+
+        if (errors.isEmpty()) {
+            if (req.body.folder === 'remove') {
+                await prisma.file.update({
+                    where: {id: req.body.fileId},
+                    data: {folderId: null}
+                })
+                res.redirect('/');
+            } else {
+                await prisma.file.update({
+                    where: {id: req.body.fileId},
+                    data: {folderId: req.body.folder}
+                })
+                res.redirect(`/folder/${req.body.folder}`)
+            }
+        } else {
+            const file = await prisma.file.findUnique({where: {id: req.params.id}, include: {folder: true, owner: true}});
+            const folders = await prisma.folder.findMany();
+
+            res.render('fileDetail', {
+                file: file,
+                user: req.user,
+                folders: folders,
+                errors: errors.array()
+            })
+        }
+    })
+]
