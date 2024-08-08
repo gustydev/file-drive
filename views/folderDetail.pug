@@ -23,3 +23,7 @@ block content
             label(for="folder")
             input(type="hidden" value=folder.id name='folder') 
             button(type="submit") Submit    
+    if errors 
+        ul 
+            for error in errors 
+                li=error.msg

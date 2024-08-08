@@ -5,9 +5,9 @@ block content
     if file.owner.id !== user.id 
         p Owned by #[strong #{file.owner.name}]
     ul 
-        li Uploaded at #{file.uploadedAt.toLocaleString()}
         li Type: #{file.type}
         li Size: #{file.sizeFormatted}
+        li Uploaded at #{file.uploadedAt.toLocaleString()}
         if file.folder 
             li Folder: #[a(href=`/folder/${file.folder.id}`)=file.folder.name]
         else
@@ -21,7 +21,7 @@ block content
             label(for="fileId")
             input(type="hidden" name='fileId' value=file.id)
             label(for="folder") Move to folder:   
-            select#folder(name="folder")
+            select#folder(name="folder" required)
                 option(value="") Select a folder...
                 optgroup(label='Folders')
                     for folder in folders 
@@ -29,7 +29,7 @@ block content
                             option(value=folder.id)=folder.name  
                 if file.folder
                     optgroup(label='Remove from folder?')
-                        option(value='remove') Remove from folder
+                        option(value='remove') Remove
             button(type="submit") Move
     if errors 
         ul 
