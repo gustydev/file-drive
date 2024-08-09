@@ -6,6 +6,8 @@ block content
         p You are not allowed to view this content.
     else
         h2 File: #{file.name}
+        if file.type.includes('image')
+            img(src=file.url, alt=file.name)
         ul 
             li Type: #{file.type}
             li Size: #{file.sizeFormatted}
