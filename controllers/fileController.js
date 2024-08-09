@@ -27,7 +27,6 @@ exports.fileUpload = [
 
     asyncHandler(async function(req, res, next) {
         if (req.file) {
-            console.log(req.file)
             const data = {
                 ownerId: req.user.id,
                 name: req.file.originalname,
@@ -154,8 +153,16 @@ exports.fileDelete = [
         const errors = validationResult(req);
         
         if (errors.isEmpty()) {
-            await prisma.file.delete({where: {id: req.body.fileId}});
-            // Add later: remove from cloud hosting as well, not just the database
+            const file = await prisma.file.findUnique({where: {id: req.body.fileId}});
+            const filePublicId = path.parse(file.url.substring(62)).name; // Extracts only the file's public id from cloudinary
+            
+            await cloudinary.uploader.destroy(filePublicId)
+            .then(async (result) => {
+                console.log(result);
+                await prisma.file.delete({where: {id: req.body.fileId}}); // Only delete from database if it's deleted from cloud first
+            })
+            .catch(error => console.log('Error deleting file from cloudinary: ', error));
+            
         }
 
         if (req.body.folder) {
