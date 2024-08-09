@@ -34,3 +34,59 @@ exports.newFolderPost = [
         }
     })
 ]
+
+exports.deleteFolderGet = asyncHandler(async function(req, res, next) {
+    const folder = await prisma.folder.findUnique({ where: {id: req.params.id}, include: {files: true, owner: true} });
+    res.render('folderDelete', {
+        folder: folder,
+        user: req.user
+    })
+})
+
+exports.deleteFolderPost = [
+    body('fileOption').custom(async (value, {req}) => {
+        const files = await prisma.file.findMany({where: {folderId: req.params.id}});
+
+        if (!files.length) { // If folder is empty, proceed with deletion
+            return true
+        }
+
+        if (!['keep', 'delete'].includes(value)) {
+            throw new Error('Invalid option for file handling (must either keep or delete)')
+        }
+    }),
+
+    asyncHandler(async function(req, res, next) {
+        const errors = validationResult(req);
+
+        if (errors.isEmpty()) {
+            if (req.body.fileOption === 'keep') {
+                await prisma.file.updateMany({
+                    where: {
+                      folderId: req.params.id
+                    },
+                    data: {
+                      folderId: undefined,
+                    },
+                  })
+            }
+            
+            if (req.body.fileOption === 'delete') {
+                await prisma.file.deleteMany({
+                    where: {folderId: req.params.id}
+                })
+            }
+
+            await prisma.folder.delete({where: {id: req.params.id}});
+
+            res.redirect('/')
+        } else {
+            const folder = await prisma.folder.findUnique({ where: {id: req.params.id}, include: {files: true, owner: true} });
+            res.render('folderDelete', {
+                folder: folder,
+                user: req.user,
+                errors: errors.array()
+            })
+        }
+    })
+]

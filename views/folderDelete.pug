@@ -1,0 +1,35 @@
+extends layout 
+
+block content  
+    if folder.owner.id !== user.id 
+        h2 Error 
+        p You are not allowed to view this content.
+    else
+        h2 Delete folder: #{folder.name}
+        if folder.files.length === 1
+            p 1 file 
+        else
+            p=`${folder.files.length} files`
+        if folder.files.length 
+            p Total size: #{folder.totalSize}
+        for file in folder.files 
+            ul.file
+                li
+                    a(href=`/file/${file.id}`)=file.name 
+                li.file-size=file.sizeFormatted
+                li.file-uploadedAt=file.uploadedAt.toLocaleString() 
+        form(action="", method="post") 
+            if folder.files.length
+                fieldset(style='width: 25%')
+                    legend How to proceed with deletion?
+                    div.form-field
+                        input#keepItems(type="radio", name="fileOption" value='keep' checked)
+                        label(for="keepFiles") Keep files loose in drive
+                    div.form-field
+                        input#deleteItems(type="radio", name="fileOption" value='delete')
+                        label(for="deleteFiles") Delete files from drive along with folder
+            button(type="submit") Delete "#{folder.name}"
+        if errors 
+            ul 
+                for error in errors 
+                    li=error.msg
