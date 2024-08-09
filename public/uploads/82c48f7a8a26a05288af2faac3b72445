@@ -1,0 +1,24 @@
+Shopping cart project
+
+main page (includes shop)
+checkout
+
+main page is just a simple text and a button with a nice background image
+shop page: display items
+for each item have the title, price, an option to raise amount to purchase and a add to cart button
+and an image of course for the item
+checkout/cart: display items bought and total amount. after clicking buy, just reset the thing and display a nice message
+bonus: individual pages for each item (generated on the fly i suppose? router string fill thing /:)
+
+fakestoreapi: electronics (name the store Kaboom in reference to that one brazilian store lmao. Logo is a bomb emoji)
+add a cool orange and black design to it
+
+test the app too:
+check if adding to cart works, check if deleting from cart works etc etc
+
+components:
+Main
+Shop
+Cart
+
+state needs to be shared among them (the items bought)
