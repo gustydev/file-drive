@@ -3,6 +3,7 @@ const { body, validationResult } = require("express-validator");
 const prisma = require('../prisma/client');
 const multer  = require('multer')
 const storage = multer.memoryStorage();
+const path = require('path');
 const maxSize = 3 * 1024 * 1024; // 3 MB
 const upload = multer({ storage: storage, limits: {fileSize: maxSize} })
 const cloudinary = require('cloudinary').v2;
@@ -73,11 +74,9 @@ exports.fileDownload = [
         
         if (errors.isEmpty()) {
             const file = await prisma.file.findUnique({where: {id: req.body.fileId}});
-            res.download(file.url, file.name, (err) => {
-                if (err) {
-                    next(err)
-                }
-            })
+            
+            const url = file.url.replace('upload', `upload/fl_attachment:${path.parse(file.name).name}`)
+            res.redirect(url)
         }
         else {
             const file = await prisma.file.findUnique({where: {id: req.params.id}, include: {folder: true, owner: true}});
