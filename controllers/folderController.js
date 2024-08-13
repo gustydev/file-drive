@@ -76,7 +76,7 @@ exports.deleteFolderPost = [
                     where: {folderId: req.params.id}
                 })
             }
-
+            // Note: this has to delete from the cloud as well
             await prisma.folder.delete({where: {id: req.params.id}});
 
             res.redirect('/')

@@ -52,7 +52,6 @@ exports.fileUpload = [
             const file = await prisma.file.create({
                 data: data
             });
-            console.log(file)
         }
 
         if (req.body.folder) {
@@ -164,7 +163,6 @@ exports.fileDelete = [
             
             await cloudinary.uploader.destroy(filePublicId)
             .then(async (result) => {
-                console.log(result);
                 await prisma.file.delete({where: {id: req.body.fileId}}); // Only delete from database if it's deleted from cloud first
             })
             .catch(error => console.log('Error deleting file from cloudinary: ', error));

@@ -5,47 +5,50 @@ block content
         h2 Error 
         p You are not allowed to view this content.
     else
-        h2 File: #{file.name}
-        if file.type.includes('image')
-            img(src=file.url, alt=file.name)
-        ul 
-            li Type: #{file.type}
-            li Size: #{file.sizeFormatted}
-            li Uploaded #{file.uploadedAt.toLocaleString()}
-            if file.folder 
-                li Folder: #[a(href=`/folder/${file.folder.id}`)=file.folder.name]
-            else
-                li Folder: none
-        form(action=`/file/${file.id}/download`, method="post") 
-            label(for="fileId")
-            input(type="hidden" name='fileId' value=file.id) 
-            button(type='submit') Download file
-        form(action=`/file/${file.id}/delete` method='post')
-            label(for="fileId")
-            input(type="hidden" name='fileId' value=file.id)
-            button(type="submit") Delete file
-        form(action=`/file/${file.id}/move`, method="post") 
-            label(for="fileId")
-            input(type="hidden" name='fileId' value=file.id)
-            label(for="folder") Move to folder:   
-            select#folder(name="folder" required)
-                option(value="") Select a folder...
-                if !folders.length
-                    option(value='' disabled) No folders found 
-                else
-                    optgroup(label='Folders')
-                        for folder in folders 
-                            if !file.folder || (folder.id !== file.folder.id)
-                                option(value=folder.id)=folder.name  
-                            else
-                                option(value='' disabled)=folder.name
-                if file.folder
-                    optgroup(label='Remove from folder?')
-                        option(value='remove') Remove
-            button(type="submit") Move
-        if errors 
-            p #[strong Errors]:
+        div.main
+          div.info
+            h2 File: #{file.name}
+            if file.type.includes('image')
+                img(src=file.url, alt=file.name)
             ul 
-                for error in errors 
-                    li=error.msg
-    a(href='/') Return to front page
+                li #[strong Type]: #{file.type}
+                li #[strong Size]: #{file.sizeFormatted}
+                li #[strong Uploaded] #{file.uploadedAt.toLocaleString()}
+                if file.folder 
+                   li #[strong Folder]: #[a(href=`/folder/${file.folder.id}`)=file.folder.name]
+                else
+                    li #[strong Folder]: none
+            form(action=`/file/${file.id}/download`, method="post") 
+                label(for="fileId")
+                input(type="hidden" name='fileId' value=file.id) 
+                button(type='submit') Download file
+            form(action=`/file/${file.id}/delete` method='post')
+                label(for="fileId")
+                input(type="hidden" name='fileId' value=file.id)
+                button(type="submit") Delete file
+            form(action=`/file/${file.id}/move`, method="post") 
+                label(for="fileId")
+                input(type="hidden" name='fileId' value=file.id)
+                label(for="folder") Move to folder:   
+                select#folder(name="folder" required)
+                    option(value="") Select a folder...
+                    if !folders.length
+                        option(value='' disabled) No folders found 
+                    else
+                        optgroup(label='Folders')
+                            for folder in folders 
+                                if !file.folder || (folder.id !== file.folder.id)
+                                    option(value=folder.id)=folder.name  
+                                else
+                                    option(value='' disabled)=folder.name
+                    if file.folder
+                        optgroup(label='Remove from folder?')
+                            option(value='remove') Remove
+                button(type="submit") Move
+            if errors 
+                div.errors
+                    p #[strong Errors]
+                    ul 
+                        for error in errors 
+                            li=error.msg
+            a(href='/') Return to front page

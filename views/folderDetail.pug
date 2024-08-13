@@ -5,30 +5,37 @@ block content
         h2 Error 
         p You are not allowed to view this content.
     else
-        h2 Folder: #{folder.name}
-        if folder.files.length === 1
-            p 1 file 
-        else
-            p=`${folder.files.length} files`
-        if folder.files.length 
-            p Total size: #{folder.totalSize}
-        for file in folder.files 
-            ul.file
-                li
-                    a(href=`/file/${file.id}`)=file.name 
-                li.file-size=file.sizeFormatted
-                li.file-uploadedAt=file.uploadedAt.toLocaleString() 
-        form(action="/file/upload", method="post" enctype="multipart/form-data")
-            label(for="file") Upload to folder: 
-            input(type="file" name='file' id='file' required)
-            label(for="folder")
-            input(type="hidden" value=folder.id name='folder') 
-            button(type="submit") Submit    
-        div.actions(style='display:flex; flex-direction: column;')
-            a(href=`/folder/${folder.id}/delete`) Delete folder
-            a(href='/') Return to front page
-    if errors 
-        p #[strong Errors]:
-        ul
-            for error in errors
-                li=error.msg
+        div.main
+          div.info
+            h2 Folder: #{folder.name}
+            p Created #{folder.createdAt.toLocaleString()}
+            if folder.files.length === 1
+                p 1 file 
+            else
+                p=`${folder.files.length} files`
+            if folder.files.length 
+                p Total size: #{folder.totalSize}
+            h3 Files:
+            ul.item-list
+             for file in folder.files 
+              li
+                div.file
+                    div.file-name
+                        a(href=`/file/${file.id}`)=file.name
+                    div.file-size=file.sizeFormatted
+                    div.file-uploadedAt=file.uploadedAt.toLocaleString()
+            form(action="/file/upload", method="post" enctype="multipart/form-data")
+                label(for="file") Upload to folder: 
+                input(type="file" name='file' id='file' required)
+                label(for="folder")
+                input(type="hidden" value=folder.id name='folder') 
+                button(type="submit") Submit    
+            div.actions(style='display:flex; flex-direction: column;')
+                a(href=`/folder/${folder.id}/delete`) Delete folder
+                a(href='/') Return to front page
+            if errors 
+                div.errors
+                    p #[strong Errors]
+                    ul 
+                        for error in errors 
+                            li=error.msg

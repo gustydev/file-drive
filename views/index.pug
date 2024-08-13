@@ -3,16 +3,18 @@ extends layout
 block content
   if user
     div.main
-      div.folder-container
+      div.folders
         p #[strong Your Folders]
         if user.folders.length 
+         ul.item-list
           for folder in user.folders 
-            ul.folder
-              li 
+           li
+            div.folder
+              div.folder-name 
                 a(href=`/folder/${folder.id}`)=folder.name 
-              li.folder-size=(folder.files.length === 1 ? '1 file' : folder.files.length + ' files')
-              li.folder-totalSize=folder.totalSize
-              li.folder-createdAt Created #{folder.createdAt.toLocaleString()}
+              div.folder-size=(folder.files.length === 1 ? '1 file' : folder.files.length + ' files')
+              div.folder-totalSize=folder.totalSize
+              div.folder-createdAt=folder.createdAt.toLocaleString()
         else 
           p No folders
         form(action="/folder/new", method="post") 
@@ -22,25 +24,31 @@ block content
       div.files
         p #[strong Your Files]
         if user.files.length 
+         ul.item-list
           for file in user.files 
-            ul.file
-              li
-                a(href=`/file/${file.id}`)=file.name 
-              li.file-size=file.sizeFormatted
-              li.file-uploadedAt Uploaded #{file.uploadedAt.toLocaleString()}
-              if file.folder 
-                li.file-folder Folder: #[a(href=`/folder/${file.folder.id}`)=file.folder.name] 
+           li
+            div.file
+              if file.folder
+                div.file-name #[a(href=`/folder/${file.folder.id}`)=file.folder.name] > #[a(href=`/file/${file.id}`)=file.name] 
+              else 
+                div.file-name
+                  a(href=`/file/${file.id}`)=file.name
+              div.file-size=file.sizeFormatted
+              div.file-uploadedAt=file.uploadedAt.toLocaleString()
         else 
           p No files found
         form(action="/file/upload", method="post" enctype="multipart/form-data")
           label(for="file") Upload a file: 
           input(type="file" name='file' id='file' required)
-          button(type="submit") Submit    
+          button(type="submit") Submit  
+      if errors 
+        div.errors
+          p #[strong Errors]
+          ul 
+            for error in errors 
+              li=error.msg 
   else 
+    //- 
+      user is not supposed to see this, added just in case
     p Welcome to #{title}. Proceed to login
     a(href='/login') Login
-  if errors 
-    p #[strong Errors]:
-    ul
-      for error in errors
-        li=error.msg
