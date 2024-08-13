@@ -17,6 +17,11 @@ h1, h2, h3, p, ul {
 
 a {
     text-decoration: none;
+    color: blue;
+}
+
+a:hover {
+    color: red;
 }
 
 .auth-page {
@@ -88,6 +93,8 @@ a {
 
 .folder, .file {
     display: grid;
+    border-left: 2px solid blue;
+    padding-left: 4px;
 }
 
 .item-list {
@@ -96,4 +103,23 @@ a {
     list-style:none;
     padding: 8px;
     gap: 8px;
+    overflow-y: auto;
+    max-height: 38vh;
+    border-left: 3px solid green;
+}
+
+.folder-delete-form {
+    flex-direction: column;
+    align-items: start;
+}
+
+form {
+    display: flex;
+    gap: 4px;
+}
+
+.folders, .files {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
 }

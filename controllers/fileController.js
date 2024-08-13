@@ -162,7 +162,7 @@ exports.fileDelete = [
             const filePublicId = path.parse(file.url.substring(62)).name; // Extracts only the file's public id from cloudinary
             
             await cloudinary.uploader.destroy(filePublicId)
-            .then(async (result) => {
+            .then(async () => {
                 await prisma.file.delete({where: {id: req.body.fileId}}); // Only delete from database if it's deleted from cloud first
             })
             .catch(error => console.log('Error deleting file from cloudinary: ', error));

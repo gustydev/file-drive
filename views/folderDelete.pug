@@ -14,15 +14,15 @@ block content
                 p=`${folder.files.length} files`
             if folder.files.length 
                 p Total size: #{folder.totalSize}
-            ul.item-list
-             for file in folder.files 
-              li
-                div.file
-                    div.file-name
+                ul.item-list
+                    for file in folder.files 
+                     li
+                      div.file
+                       div.file-name
                         a(href=`/file/${file.id}`)=file.name
-                    div.file-size=file.sizeFormatted
-                    div.file-uploadedAt=file.uploadedAt.toLocaleString()
-            form(action="", method="post") 
+                       div.file-size=file.sizeFormatted
+                       div.file-uploadedAt=file.uploadedAt.toLocaleString()
+            form(action="", method="post" class='folder-delete-form') 
                 if folder.files.length
                     fieldset(style='width: 25%')
                         legend How to proceed with deletion?

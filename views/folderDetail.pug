@@ -15,15 +15,15 @@ block content
                 p=`${folder.files.length} files`
             if folder.files.length 
                 p Total size: #{folder.totalSize}
-            h3 Files:
-            ul.item-list
-             for file in folder.files 
-              li
-                div.file
-                    div.file-name
-                        a(href=`/file/${file.id}`)=file.name
-                    div.file-size=file.sizeFormatted
-                    div.file-uploadedAt=file.uploadedAt.toLocaleString()
+                h3 Files:
+                ul.item-list
+                 for file in folder.files 
+                  li
+                    div.file
+                        div.file-name
+                            a(href=`/file/${file.id}`)=file.name
+                        div.file-size=file.sizeFormatted
+                        div.file-uploadedAt=file.uploadedAt.toLocaleString()
             form(action="/file/upload", method="post" enctype="multipart/form-data")
                 label(for="file") Upload to folder: 
                 input(type="file" name='file' id='file' required)
