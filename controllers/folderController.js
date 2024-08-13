@@ -1,6 +1,11 @@
 const { body, validationResult } = require("express-validator");
 const asyncHandler = require("express-async-handler");
 const prisma = require('../prisma/client')
+const path = require('path');
+const cloudinary = require('cloudinary').v2;
+cloudinary.config({
+    secure: true
+});
 
 exports.viewFolderGet = asyncHandler(async function(req,res,next) {
     const folder = await prisma.folder.findUnique({ where: {id: req.params.id}, include: {files: true, owner: true} });
@@ -72,11 +77,20 @@ exports.deleteFolderPost = [
             }
             
             if (req.body.fileOption === 'delete') {
-                await prisma.file.deleteMany({
-                    where: {folderId: req.params.id}
+                const files = await prisma.file.findMany({where: {folderId: req.params.id}})
+                files.forEach((file) => {
+                    file.publicId = path.parse(file.url.substring(62)).name;
                 })
+
+                await Promise.all(files.map(async (file) => {
+                    await cloudinary.uploader.destroy(file.publicId)
+                    .then(async () => {
+                        await prisma.file.delete({where: {id: file.id}}); // Only delete from database if it's deleted from cloud first
+                    })
+                    .catch(error => console.log('Error deleting file from cloudinary: ', error));
+                }))
             }
-            // Note: this has to delete from the cloud as well
+            
             await prisma.folder.delete({where: {id: req.params.id}});
 
             res.redirect('/')
