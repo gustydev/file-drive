@@ -27,9 +27,14 @@ exports.fileUpload = [
 
     asyncHandler(async function(req, res, next) {
         if (req.file) {
+            if (req.file.size === 0) { // Cloudinary doesn't know what to do with 0 byte files
+                throw new Error("File must not be empty") // Handle with express validator later
+            }
+            
+            // Issue: the file name fucks up accents
             const data = {
                 ownerId: req.user.id,
-                name: req.file.originalname,
+                name: Buffer.from(req.file.originalname, 'latin1').toString('utf8'),
                 type: req.file.mimetype,
                 size: req.file.size,
                 url: undefined,
@@ -39,11 +44,11 @@ exports.fileUpload = [
             await new Promise((resolve) => {
                 cloudinary.uploader.upload_stream({resource_type: 'auto'}, (error, uploadResult) => {
                     return resolve(uploadResult);
-                }).end(req.file.buffer);
+                }).end(req.file.buffer)
             }).then((uploadResult) => {
                 console.log(`Buffer upload_stream wth promise success - ${uploadResult.public_id}`);
                 data.url = uploadResult.secure_url;
-            });
+            })
 
             const file = await prisma.file.create({
                 data: data
@@ -73,8 +78,10 @@ exports.fileDownload = [
         
         if (errors.isEmpty()) {
             const file = await prisma.file.findUnique({where: {id: req.body.fileId}});
+            const downloadName = path.parse(file.name).name.replace(/[^\w\s]/gi, ''); // special characters make the file undownloadable from cloudinary
             
-            const url = file.url.replace('upload', `upload/fl_attachment:${path.parse(file.name).name}`)
+            const url = file.url.replace('upload', `upload/fl_attachment:${downloadName}`)
+
             res.redirect(url)
         }
         else {

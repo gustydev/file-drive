@@ -23,7 +23,6 @@ block content
         p #[strong Your Files]
         if user.files.length 
           for file in user.files 
-          
             ul.file
               li
                 a(href=`/file/${file.id}`)=file.name 
@@ -41,6 +40,7 @@ block content
     p Welcome to #{title}. Proceed to login
     a(href='/login') Login
   if errors 
+    p #[strong Errors]:
     ul
       for error in errors
         li=error.msg

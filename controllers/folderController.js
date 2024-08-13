@@ -11,7 +11,7 @@ exports.viewFolderGet = asyncHandler(async function(req,res,next) {
 });
 
 exports.newFolderPost = [
-    body('folder').isLength({min: 1}).withMessage('Folder must have a name')
+    body('folder').trim().isLength({min: 1}).withMessage('Folder must have a name')
     .isLength({max: 50}).withMessage('Folder name has a maximum length of 50 characters')
     .trim(),
 
@@ -47,10 +47,10 @@ exports.deleteFolderPost = [
     body('fileOption').custom(async (value, {req}) => {
         const files = await prisma.file.findMany({where: {folderId: req.params.id}});
 
-        if (!files.length) { // If folder is empty, proceed with deletion
+        if (!files.length) { // If folder is empty, proceed with deletion regardless of fileOption value
             return true
         }
-
+        
         if (!['keep', 'delete'].includes(value)) {
             throw new Error('Invalid option for file handling (must either keep or delete)')
         }

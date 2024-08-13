@@ -30,6 +30,7 @@ block content
                         label(for="deleteFiles") Delete files from drive along with folder
             button(type="submit") Delete "#{folder.name}"
         if errors 
+            p #[strong Errors]:
             ul 
                 for error in errors 
                     li=error.msg

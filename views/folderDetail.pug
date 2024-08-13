@@ -25,8 +25,9 @@ block content
             input(type="hidden" value=folder.id name='folder') 
             button(type="submit") Submit    
         a(href=`/folder/${folder.id}/delete`) Delete folder
-        if errors 
-            ul 
-                for error in errors 
-                    li=error.msg
+    if errors 
+        p #[strong Errors]:
+        ul
+            for error in errors
+                li=error.msg
     a(href='/') Return to front page

@@ -44,6 +44,7 @@ block content
                         option(value='remove') Remove
             button(type="submit") Move
         if errors 
+            p #[strong Errors]:
             ul 
                 for error in errors 
                     li=error.msg
