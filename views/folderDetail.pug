@@ -1,7 +1,7 @@
 extends layout 
 
 block content 
-    if folder.owner.id !== user.id 
+    if !user || folder.owner.id !== user.id 
         h2 Error 
         p You are not allowed to view this content.
     else
@@ -24,10 +24,11 @@ block content
             label(for="folder")
             input(type="hidden" value=folder.id name='folder') 
             button(type="submit") Submit    
-        a(href=`/folder/${folder.id}/delete`) Delete folder
+        div.actions(style='display:flex; flex-direction: column;')
+            a(href=`/folder/${folder.id}/delete`) Delete folder
+            a(href='/') Return to front page
     if errors 
         p #[strong Errors]:
         ul
             for error in errors
                 li=error.msg
-    a(href='/') Return to front page

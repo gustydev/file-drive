@@ -53,12 +53,12 @@ passport.use(
       req.session.messages = []; // Clear messages to avoid duplication
       const user = await prisma.user.findFirst({where: {name: username}});
       if (!user) {
-        return done(null, false, { message: "Incorrect username" });
+        return done(null, false, { message: "Incorrect username. Please try again" });
       };
 
       const match = await bcrypt.compare(password, user.password);
       if (!match) {
-        return done(null, false, { message: "Incorrect password" });
+        return done(null, false, { message: "Incorrect password. Please try again" });
       }
 
       return done(null, user);

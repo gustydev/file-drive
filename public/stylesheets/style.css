@@ -2,3 +2,45 @@ img {
     width: 10%;
     height: auto;
 }
+
+body {
+    height: 100vh;
+    margin: 0;
+    padding: 0;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+.auth-page {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    height: 50%;
+    gap: 8px;
+}
+
+.auth-form {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.auth-form > input {
+    height: 20px;
+}
+
+.auth-form > button[type='submit'] {
+    align-self: center;
+}
+
+.errors {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.errors > ul {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+}

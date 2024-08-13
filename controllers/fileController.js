@@ -31,7 +31,6 @@ exports.fileUpload = [
                 throw new Error("File must not be empty") // Handle with express validator later
             }
             
-            // Issue: the file name fucks up accents
             const data = {
                 ownerId: req.user.id,
                 name: Buffer.from(req.file.originalname, 'latin1').toString('utf8'),

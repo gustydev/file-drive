@@ -21,7 +21,7 @@ exports.signupPost = [
         if (value === req.body.password) {
             return true
         } else {
-            throw new Error('Passwords do not match!')
+            throw new Error('Passwords do not match! Please try again.')
         }
     }),
 

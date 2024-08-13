@@ -1,7 +1,7 @@
 extends layout 
 
 block content 
-    if file.owner.id !== user.id 
+    if !user || file.owner.id !== user.id 
         h2 Error 
         p You are not allowed to view this content.
     else
