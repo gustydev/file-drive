@@ -3,7 +3,8 @@
   "version": "0.0.0",
   "private": true,
   "scripts": {
-    "start": "node --watch ./bin/www"
+    "start": "node --watch ./bin/www",
+    "generate": "npx prisma generate"
   },
   "dependencies": {
     "@prisma/client": "^5.18.0",
