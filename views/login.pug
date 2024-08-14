@@ -1,12 +1,12 @@
 doctype html
 html
   head
-    title gDrive
+    title File Drive
     link(rel='stylesheet', href='/stylesheets/style.css')
   body 
     div.auth-page
-      h1 gDrive
-      p Welcome to gDrive! Proceed to login 
+      h1 File Drive
+      p Welcome to File Drive! Proceed to login 
       form(action="", method="post" class='auth-form') 
         label(for="username") #[strong Username]: 
         input(required type="text" name='username' id='username')
@@ -14,9 +14,9 @@ html
         input(required type="password" name='password' id='password')   
         button(type="submit") Login
       p Don't have an account? #[a(href='/signup') Sign up] for free.
-      if errors 
-        div(class='errors auth-errors')
-          p #[strong Errors]
-          ul 
-            for error in errors 
-                li=error
+    if errors 
+      div(class='errors auth-errors')
+        p #[strong Errors]
+        ul 
+          for error in errors 
+              li=error

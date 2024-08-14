@@ -10,6 +10,7 @@ cloudinary.config({
 exports.viewFolderGet = asyncHandler(async function(req,res,next) {
     const folder = await prisma.folder.findUnique({ where: {id: req.params.id}, include: {files: true, owner: true} });
     res.render('folderDetail', {
+        title: `Folder: ${folder.name}`,
         folder: folder,
         user: req.user
     })
@@ -32,7 +33,7 @@ exports.newFolderPost = [
             res.redirect('/');
         } else {
             res.render('index', {
-                title: 'gDrive',
+                title: 'File Drive',
                 user: req.user,
                 errors: errors.array()
             })
@@ -43,6 +44,7 @@ exports.newFolderPost = [
 exports.deleteFolderGet = asyncHandler(async function(req, res, next) {
     const folder = await prisma.folder.findUnique({ where: {id: req.params.id}, include: {files: true, owner: true} });
     res.render('folderDelete', {
+        title: `Delete folder: ${folder.name}`,
         folder: folder,
         user: req.user
     })

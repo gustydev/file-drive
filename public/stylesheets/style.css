@@ -30,7 +30,7 @@ a:hover {
     align-items: center;
     justify-content: center;
     height: 50%;
-    gap: 16px;
+    gap: 24px;
 }
 
 .auth-form {
@@ -93,7 +93,7 @@ a:hover {
 
 .folder, .file {
     display: grid;
-    border-left: 2px solid blue;
+    border-left: 1px solid blue;
     padding-left: 4px;
 }
 
@@ -103,7 +103,7 @@ a:hover {
     list-style:none;
     padding: 8px;
     gap: 8px;
-    border-left: 3px solid #008000;
+    border-left: 2px solid blue;
 }
 
 .folder-delete-form {

@@ -5,7 +5,7 @@ html
     link(rel='stylesheet', href='/stylesheets/style.css')
   body 
     div.auth-page
-        h1 gDrive
+        h1 File Drive
         h2=title 
         form(action="", method="post" class='auth-form') 
             label(for="username") #[strong Username*]: 
@@ -16,10 +16,10 @@ html
             input(required type="password" name='confirm-password' id='confirm-password')
             button(type="submit") Submit   
         a(href='/' style='margin-top: 24px;') Return to front page
-        if errors 
-          div(class='errors auth-errors')
-            p #[strong Errors]
-            ul 
-              for error in errors 
-                li=error.msg
+    if errors 
+      div(class='errors auth-errors')
+        p #[strong Errors]
+        ul 
+          for error in errors 
+            li=error.msg
                 

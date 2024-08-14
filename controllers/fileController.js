@@ -16,6 +16,7 @@ exports.fileDetailGet = asyncHandler(async function(req, res, next) {
     const folders = req.user ? await prisma.folder.findMany({where: {owner: {id: req.user.id}}}) : undefined;
     
     res.render('fileDetail', {
+        title: `File: ${file.name}`,
         file: file,
         user: req.user,
         folders: folders
@@ -51,7 +52,7 @@ exports.fileUpload = [
                 })
             } else {
                 res.render('index', { 
-                    title: 'gDrive', 
+                    title: 'File Drive', 
                     user: req.user, 
                     errors: [{msg: fileError}]
                 });

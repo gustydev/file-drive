@@ -5,7 +5,11 @@ const passport = require("passport");
 const prisma = require('../prisma/client')
 
 exports.signupGet = function(req, res, next) {
-    res.render('signup', {title: 'Sign up'})
+    if (req.user) {
+        res.redirect('/')
+    } else {
+        res.render('signup', {title: 'Sign up'})
+    }
 };
 
 exports.signupPost = [
@@ -57,7 +61,11 @@ exports.signupPost = [
 ];
 
 exports.loginGet = function(req, res, next) {
-    res.render('login', {errors: req.session.messages})
+    if (req.user) {
+        res.redirect('/')
+    } else {
+        res.render('login', {errors: req.session.messages})
+    }
 }
 
 exports.loginPost = passport.authenticate("local", {
