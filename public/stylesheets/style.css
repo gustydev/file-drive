@@ -103,9 +103,7 @@ a:hover {
     list-style:none;
     padding: 8px;
     gap: 8px;
-    overflow-y: auto;
-    max-height: 38vh;
-    border-left: 3px solid green;
+    border-left: 3px solid #008000;
 }
 
 .folder-delete-form {

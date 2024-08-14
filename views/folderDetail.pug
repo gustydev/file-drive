@@ -2,8 +2,9 @@ extends layout
 
 block content 
     if !user || folder.owner.id !== user.id 
-        h2 Error 
-        p You are not allowed to view this content.
+        div.main
+            p You are not allowed to view this content.
+            a(href='/') Return to main page
     else
         div.main
           div.info

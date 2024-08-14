@@ -5,7 +5,7 @@ const multer  = require('multer')
 const storage = multer.memoryStorage();
 const path = require('path');
 const maxSize = 3 * 1024 * 1024; // 3 MB
-const upload = multer({ storage: storage, limits: {fileSize: maxSize} })
+const upload = multer({ storage: storage, limits: {fileSize: maxSize} }).single('file');
 const cloudinary = require('cloudinary').v2;
 cloudinary.config({
     secure: true
@@ -13,7 +13,7 @@ cloudinary.config({
 
 exports.fileDetailGet = asyncHandler(async function(req, res, next) {
     const file = await prisma.file.findUnique({where: {id: req.params.id}, include: {folder: true, owner: true}});
-    const folders = await prisma.folder.findMany({where: {owner: {id: req.user.id}}});
+    const folders = req.user ? await prisma.folder.findMany({where: {owner: {id: req.user.id}}}) : undefined;
     
     res.render('fileDetail', {
         file: file,
@@ -23,14 +23,43 @@ exports.fileDetailGet = asyncHandler(async function(req, res, next) {
 }) 
 
 exports.fileUpload = [
-    upload.single('file'), // Add custom error handling for files larger than 3MB later
+    upload,
+
+    (err, req, res, next) => {
+        if (err instanceof multer.MulterError) {
+            // Custom error message for file size limit exceeded
+            if (err.code === 'LIMIT_FILE_SIZE') {
+                req.fileValidationError = 'File size exceeds 3MB limit';
+            } else {
+                req.fileValidationError = err.message;
+            }
+        }
+        next();
+    },
 
     asyncHandler(async function(req, res, next) {
-        if (req.file) {
-            if (req.file.size === 0) { // Cloudinary doesn't know what to do with 0 byte files
-                throw new Error("File must not be empty") // Handle with express validator later
+        let fileError = req.fileValidationError || (!req.file ? 'Invalid file' : req.file.size === 0 ? 'File is too small (0 bytes)' : null);
+
+        if (fileError) {
+            if (req.body.folder) {
+                const folder = await prisma.folder.findUnique({ where: {id: req.body.folder}, include: {files: true, owner: true} });
+
+                res.render('folderDetail', {
+                    folder: folder,
+                    user: req.user,
+                    errors: [{msg: fileError}]
+                })
+            } else {
+                res.render('index', { 
+                    title: 'gDrive', 
+                    user: req.user, 
+                    errors: [{msg: fileError}]
+                });
             }
-            
+            return;
+        }
+
+        if (!fileError && req.file) {
             const data = {
                 ownerId: req.user.id,
                 name: Buffer.from(req.file.originalname, 'latin1').toString('utf8'),
@@ -49,7 +78,7 @@ exports.fileUpload = [
                 data.url = uploadResult.secure_url;
             })
 
-            const file = await prisma.file.create({
+            await prisma.file.create({
                 data: data
             });
         }
