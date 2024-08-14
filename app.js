@@ -10,6 +10,9 @@ const passport = require("passport");
 const LocalStrategy = require("passport-local").Strategy;
 const bcrypt = require('bcryptjs');
 const prisma = require('./prisma/client');
+const compression = require('compression');
+const helmet = require('helmet');
+const RateLimit = require("express-rate-limit");
 
 const indexRouter = require('./routes/index');
 const authRouter = require('./routes/auth');
@@ -18,9 +21,22 @@ const folderRouter = require('./routes/folder');
 
 const app = express();
 
+const limiter = RateLimit({
+  windowMs: 1 * 60 * 1000, // 1 minute
+  max: 50,
+});
+app.use(limiter);
+
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'pug');
+
+app.use(compression());
+app.use(helmet.contentSecurityPolicy({
+  directives: {
+    "img-src": ['res.cloudinary.com']
+  }
+}));
 
 app.use(logger('dev'));
 app.use(express.json());

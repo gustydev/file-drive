@@ -114,6 +114,7 @@ a:hover {
 form {
     display: flex;
     gap: 4px;
+    align-items: center;
 }
 
 .folders, .files {

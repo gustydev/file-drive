@@ -15,11 +15,15 @@ exports.fileDetailGet = asyncHandler(async function(req, res, next) {
     const file = await prisma.file.findUnique({where: {id: req.params.id}, include: {folder: true, owner: true}});
     const folders = req.user ? await prisma.folder.findMany({where: {owner: {id: req.user.id}}}) : undefined;
     
+    const downloadName = path.parse(file.name).name.replace(/[^\w\s]/gi, ''); // special characters make the file undownloadable from cloudinary       
+    const url = file.url.replace('upload', `upload/fl_attachment:${downloadName}`)
+
     res.render('fileDetail', {
         title: `File: ${file.name}`,
         file: file,
         user: req.user,
-        folders: folders
+        folders: folders,
+        url: url
     })
 }) 
 
@@ -90,40 +94,6 @@ exports.fileUpload = [
             res.redirect('/')
         }
     })
-]
-
-exports.fileDownload = [
-    body('fileId').custom(async (value) => {
-        const file = await prisma.file.findUnique({where: {id: value}});
-
-        if (!file) {
-            throw new Error(`Invalid file ID: ${value}`)
-        }
-    }),
-
-    asyncHandler(async function(req, res, next) {
-        const errors = validationResult(req);
-        
-        if (errors.isEmpty()) {
-            const file = await prisma.file.findUnique({where: {id: req.body.fileId}});
-            const downloadName = path.parse(file.name).name.replace(/[^\w\s]/gi, ''); // special characters make the file undownloadable from cloudinary
-            
-            const url = file.url.replace('upload', `upload/fl_attachment:${downloadName}`)
-
-            res.redirect(url)
-        }
-        else {
-            const file = await prisma.file.findUnique({where: {id: req.params.id}, include: {folder: true, owner: true}});
-            const folders = await prisma.folder.findMany();
-        
-            res.render('fileDetail', {
-                file: file,
-                user: req.user,
-                folders: folders,
-                errors: errors.array()
-            })
-        }
-    }) 
 ]
 
 exports.fileMove = [
