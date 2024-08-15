@@ -74,6 +74,7 @@ exports.deleteFolderPost = [
                     },
                     data: {
                       folderId: undefined,
+                      shared: false
                     },
                   })
             }

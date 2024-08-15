@@ -27,6 +27,7 @@ block content
                 if folder.files.length
                     fieldset(style='width: 25%')
                         legend How to proceed with deletion?
+                        p #[strong Note]: if the folder is shared, its files will become unshared after it's deleted
                         div.form-field
                             input#keepItems(type="radio", name="fileOption" value='keep' checked)
                             label(for="keepFiles") Keep files loose in drive
@@ -40,4 +41,5 @@ block content
                         ul 
                             for error in errors 
                                 li=error.msg
+            a(href=`/folder/${folder.id}`) Return to folder
             a(href='/') Return to front page
