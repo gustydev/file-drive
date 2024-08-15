@@ -119,7 +119,10 @@ exports.folderShareGet = asyncHandler(async function(req, res, next) {
 
 exports.folderSharePost = [
     body('duration').isNumeric().withMessage('Duration must be a number')
-    .isLength({min: 0}).withMessage('Duration must be at least 0 days'),
+    .isLength({min: 0}).withMessage('Duration must be at least 0 days')
+    .custom((value) => {
+        return !isNaN(new Date(Date.now() + value * 86400000)) // isNaN checks if date is invalid (true = invalid, false = valid). Invert to validate duration
+    }).withMessage('Invalid date (probably too many days inserted)'),
 
     asyncHandler(async function(req, res, next) {
         const errors = validationResult(req);
