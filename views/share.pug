@@ -1,0 +1,31 @@
+extends layout 
+
+block content 
+    if !user || (file && file.owner.id !== user.id) || (folder && folder.owner.id !== user.id)
+        div.main
+            p You are not allowed to view this content.
+            a(href='/') Return to main page
+    else
+        div.main
+            h2=title
+            form(action="", method="post") 
+                label(for="duration") Insert the duration (in days) until the link expires (or, insert 0 to unshare): 
+                input(type="number" name='duration' required min=0)
+                button(type="submit") Generate link
+            if file && file.shared && file.shareExpires >= Date.now()
+                h3 File is being shared!
+                p Link: 
+                    a(href=`/share/file/${file.shareId}` class='shareLink')
+                p Valid until #{file.shareExpires.toLocaleString()}
+            if folder && folder.shared && folder.shareExpires >= Date.now()
+                h3 Folder is being shared!
+                p Link: 
+                    a(href=`/share/folder/${folder.shareId}` class='shareLink') 
+                p Valid until #{folder.shareExpires.toLocaleString()}
+            if errors 
+                div.errors
+                    p #[strong Errors]
+                    ul 
+                        for error in errors 
+                            li=error.msg
+            a(href='/') Return to front page

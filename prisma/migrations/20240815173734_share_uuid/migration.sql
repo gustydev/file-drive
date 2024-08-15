@@ -1,0 +1,9 @@
+-- AlterTable
+ALTER TABLE "File" ALTER COLUMN "shareId" DROP DEFAULT,
+ALTER COLUMN "shareId" SET DATA TYPE TEXT;
+DROP SEQUENCE "File_shareId_seq";
+
+-- AlterTable
+ALTER TABLE "Folder" ALTER COLUMN "shareId" DROP DEFAULT,
+ALTER COLUMN "shareId" SET DATA TYPE TEXT;
+DROP SEQUENCE "Folder_shareId_seq";

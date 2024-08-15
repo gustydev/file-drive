@@ -24,7 +24,7 @@ exports.newFolderPost = [
     asyncHandler(async function(req,res,next) {
         const errors = validationResult(req);
         if (errors.isEmpty()) {
-            const folder = await prisma.folder.create({
+            await prisma.folder.create({
                 data: {
                     name: req.body.folder,
                     ownerId: req.user.id

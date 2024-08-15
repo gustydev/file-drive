@@ -24,6 +24,10 @@ a:hover {
     color: red;
 }
 
+.shareLink::after {
+    content: attr(href);
+}
+
 .auth-page {
     display: flex;
     flex-direction: column;

@@ -24,24 +24,30 @@ model Session {
 }
 
 model File {
-  id         String   @id @default(uuid())
-  url        String
-  name       String
-  size       Int
-  type       String
-  uploadedAt DateTime @default(now())
-  folder     Folder?  @relation(fields: [folderId], references: [id])
-  folderId   String?
-  owner      User     @relation(fields: [ownerId], references: [id])
-  ownerId    Int
+  id           String    @id @default(uuid())
+  url          String
+  name         String
+  size         Int
+  type         String
+  uploadedAt   DateTime  @default(now())
+  folder       Folder?   @relation(fields: [folderId], references: [id])
+  folderId     String?
+  owner        User      @relation(fields: [ownerId], references: [id])
+  ownerId      Int
+  shared       Boolean   @default(false)
+  shareId      String    @default(uuid())
+  shareExpires DateTime?
 }
 
 model Folder {
-  id        String      @id @default(uuid())
-  name      String
-  createdAt DateTime @default(now())
-  updatedAt DateTime @default(now())
-  files     File[]
-  owner     User     @relation(fields: [ownerId], references: [id])
-  ownerId   Int
+  id           String    @id @default(uuid())
+  name         String
+  createdAt    DateTime  @default(now())
+  updatedAt    DateTime  @default(now())
+  files        File[]
+  owner        User      @relation(fields: [ownerId], references: [id])
+  ownerId      Int
+  shared       Boolean   @default(false)
+  shareId      String    @default(uuid())
+  shareExpires DateTime?
 }

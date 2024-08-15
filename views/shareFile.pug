@@ -1,0 +1,20 @@
+extends layout 
+
+block content 
+    if !file.shared || file.shareExpires < Date.now()
+        div.main
+            p You are not allowed to view this content.
+            a(href='/') Return to main page
+    else 
+        div.main
+          div.info
+            h2 File: #{file.name}
+            if file.type.includes('image')
+                img(src=file.url, alt=file.name)
+            p Shared by #{file.owner.name}
+            ul 
+                li #[strong Type]: #{file.type}
+                li #[strong Size]: #{file.sizeFormatted}
+                li #[strong Uploaded] #{file.uploadedAt.toLocaleString()}
+            a(href=url) Download
+            a(href='/') Return to front page

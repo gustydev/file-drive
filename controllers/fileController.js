@@ -176,3 +176,61 @@ exports.fileDelete = [
         }
     })
 ]
+
+exports.fileShareGet = asyncHandler(async function (req, res, next) {
+    const file = await prisma.file.findUnique({where: {id: req.params.id}, include: {owner: true}});
+
+    res.render('share', {
+        title: `Share file: ${file.name}`,
+        file: file,
+        user: req.user
+    })
+}) 
+
+exports.fileSharePost = [
+    body('duration').isNumeric().withMessage('Duration must be a number')
+    .isLength({min: 0}).withMessage('Duration must be at least 0 days'),
+
+    asyncHandler(async function(req, res, next) {
+        const errors = validationResult(req);
+
+        if (errors.isEmpty()) {
+            const sharedFile = await prisma.file.update({
+                where: {id: req.params.id},
+                data: {
+                    shared: true,
+                    shareExpires: new Date(Date.now() + req.body.duration * 86400000) // number of days (user input) * milliseconds in a day
+                },
+                include: {owner: true}
+            })
+            
+            res.render('share', {
+                title: `Share file: ${sharedFile.name}`,
+                file: sharedFile,
+                user: req.user
+            })
+
+        } else {
+            const file = await prisma.file.findUnique({where: {id: req.params.id}, include: {owner: true}});
+
+            res.render('share', {
+                title: `Share file: ${file.name}`,
+                file: file,
+                user: req.user,
+                errors: errors.array()
+            })
+        }
+    })
+]
+
+exports.displaySharedFile = asyncHandler(async function(req, res, next) {
+    const file = await prisma.file.findFirst({where: {shareId: req.params.id}, include: {owner: true, folder: true}});
+    const downloadName = path.parse(file.name).name.replace(/[^\w\s]/gi, ''); // special characters make the file undownloadable from cloudinary       
+    const url = file.url.replace('upload', `upload/fl_attachment:${downloadName}`)
+
+    res.render('shareFile', {
+        title: `Shared file: ${file.name}`,
+        file: file,
+        url: url
+    })
+}) 

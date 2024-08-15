@@ -11,7 +11,6 @@ block content
             h2 File: #{file.name}
             if file.type.includes('image')
                 img(src=file.url, alt=file.name)
-            a(href=url) Download file 
             ul 
                 li #[strong Type]: #{file.type}
                 li #[strong Size]: #{file.sizeFormatted}
@@ -20,6 +19,8 @@ block content
                    li #[strong Folder]: #[a(href=`/folder/${file.folder.id}`)=file.folder.name]
                 else
                     li #[strong Folder]: none
+            a(href=url) Download
+            a(href=`/file/${file.id}/share`) Share
             form(action=`/file/${file.id}/delete` method='post')
                 label(for="fileId")
                 input(type="hidden" name='fileId' value=file.id)
