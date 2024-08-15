@@ -44,11 +44,10 @@ exports.fileUpload = [
 
     asyncHandler(async function(req, res, next) {
         let fileError = req.fileValidationError || (!req.file ? 'Invalid file' : req.file.size === 0 ? 'File is too small (0 bytes)' : null);
-
+        const folder = await prisma.folder.findUnique({ where: {id: req.body.folder}, include: {files: true, owner: true} });
+        
         if (fileError) {
             if (req.body.folder) {
-                const folder = await prisma.folder.findUnique({ where: {id: req.body.folder}, include: {files: true, owner: true} });
-
                 res.render('folderDetail', {
                     folder: folder,
                     user: req.user,
@@ -71,7 +70,9 @@ exports.fileUpload = [
                 type: req.file.mimetype,
                 size: req.file.size,
                 url: undefined,
-                folderId: req.body.folder || undefined
+                folderId: req.body.folder || undefined,
+                shared: folder.shared,
+                shareExpires: folder.shareExpires
             };
 
             await new Promise((resolve) => {
@@ -231,6 +232,7 @@ exports.displaySharedFile = asyncHandler(async function(req, res, next) {
     res.render('shareFile', {
         title: `Shared file: ${file.name}`,
         file: file,
-        url: url
+        url: url,
+        user: req.user
     })
 }) 

@@ -9,7 +9,7 @@ block content
         div.main
             h2=title
             form(action="", method="post") 
-                label(for="duration") Insert the duration (in days) until the link expires (insert 0 to unshare): 
+                label(for="duration") Insert the duration in days until the link expires (insert 0 to unshare): 
                 input(type="number" name='duration' required min=0)
                 button(type="submit") Generate link
             if file && file.shared && file.shareExpires >= Date.now()

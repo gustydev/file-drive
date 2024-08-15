@@ -19,30 +19,31 @@ block content
                    li #[strong Folder]: #[a(href=`/folder/${file.folder.id}`)=file.folder.name]
                 else
                     li #[strong Folder]: none
-            h3(style='margin-top:8px') Actions:
-            a(href=url) Download
-            a(href=`/file/${file.id}/share`) Share
-            form(action=`/file/${file.id}/delete` method='post')
-                input(type="hidden" name='fileId' value=file.id)
-                button(type="submit").button-to-link Delete
-            form(action=`/file/${file.id}/move`, method="post") 
-                input(type="hidden" name='fileId' value=file.id)
-                label(for="folder") Move to folder:   
-                select#folder(name="folder" required)
-                    option(value="") Select a folder...
-                    if !folders.length
-                        option(value='' disabled) No folders found 
-                    else
-                        optgroup(label='Folders')
-                            for folder in folders 
-                                if !file.folder || (folder.id !== file.folder.id)
-                                    option(value=folder.id)=folder.name  
-                                else
-                                    option(value='' disabled)=folder.name
-                    if file.folder
-                        optgroup(label='Remove from folder?')
-                            option(value='remove') Remove
-                button(type="submit") Move
+            div.actions(style='display:flex; flex-direction: column; margin-top: 8px')    
+                h3 Actions:
+                a(href=url) Download
+                a(href=`/file/${file.id}/share`) Share
+                form(action=`/file/${file.id}/delete` method='post')
+                    input(type="hidden" name='fileId' value=file.id)
+                    button(type="submit").button-to-link Delete
+                form(action=`/file/${file.id}/move`, method="post") 
+                    input(type="hidden" name='fileId' value=file.id)
+                    label(for="folder") Move to folder:   
+                    select#folder(name="folder" required)
+                        option(value="") Select a folder...
+                        if !folders.length
+                            option(value='' disabled) No folders found 
+                        else
+                            optgroup(label='Folders')
+                                for folder in folders 
+                                    if !file.folder || (folder.id !== file.folder.id)
+                                        option(value=folder.id)=folder.name  
+                                    else
+                                        option(value='' disabled)=folder.name
+                        if file.folder
+                            optgroup(label='Remove from folder?')
+                                option(value='remove') Remove
+                    button(type="submit") Move
             if errors 
                 div.errors
                     p #[strong Errors]

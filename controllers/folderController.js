@@ -106,3 +106,75 @@ exports.deleteFolderPost = [
         }
     })
 ]
+
+exports.folderShareGet = asyncHandler(async function(req, res, next) {
+    const folder = await prisma.folder.findUnique({ where: {id: req.params.id}, include: {files: true, owner: true} });
+
+    res.render('share', {
+        title: `Share folder: ${folder.name}`,
+        folder: folder,
+        user: req.user
+    })
+})
+
+exports.folderSharePost = [
+    body('duration').isNumeric().withMessage('Duration must be a number')
+    .isLength({min: 0}).withMessage('Duration must be at least 0 days'),
+
+    asyncHandler(async function(req, res, next) {
+        const errors = validationResult(req);
+
+        if (errors.isEmpty()) {
+            const sharedFolder = await prisma.folder.update({
+                where: {
+                    id: req.params.id
+                },
+                data: {
+                    shared: true,
+                    shareExpires: new Date(Date.now() + req.body.duration * 86400000) // number of days (user input) * milliseconds in a day
+                },
+                include: {
+                    owner: true
+                }
+            })
+
+            await prisma.file.updateMany({
+                where: {
+                    folder: {
+                        id: req.params.id
+                    }
+                },
+                data: {
+                    shared: true,
+                    shareExpires: new Date(Date.now() + req.body.duration * 86400000)
+                }
+            })
+
+            res.render('share', {
+                title: `Share folder: ${sharedFolder.name}`,
+                folder: sharedFolder,
+                user: req.user
+            })
+
+        } else {
+            const folder = await prisma.folder.findUnique({ where: {id: req.params.id}, include: {files: true, owner: true} });
+
+            res.render('share', {
+                title: `Share folder: ${folder.name}`,
+                folder: folder,
+                user: req.user,
+                errors: errors.array()
+            })
+        }
+    }) 
+]
+
+exports.displaySharedFolder = asyncHandler(async function(req, res, next) {
+    const folder = await prisma.folder.findFirst({where: {shareId: req.params.id}, include: {owner: true, files: true}});
+
+    res.render('shareFolder', {
+        title: `Shared folder: ${folder.name}`,
+        folder: folder,
+        user: req.user
+    })
+}) 

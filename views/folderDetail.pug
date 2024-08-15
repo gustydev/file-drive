@@ -31,6 +31,7 @@ block content
                 input(type="hidden" value=folder.id name='folder') 
                 button(type="submit") Submit    
             div.actions(style='display:flex; flex-direction: column;')
+                a(href=`/folder/${folder.id}/share`) Share folder
                 a(href=`/folder/${folder.id}/delete`) Delete folder
                 a(href='/') Return to front page
             if errors 

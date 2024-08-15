@@ -1,0 +1,29 @@
+extends layout 
+
+block content 
+    if !folder.shared || folder.shareExpires < Date.now()
+        div.main
+            p You are not allowed to view this content.
+            a(href='/') Return to main page
+    else 
+        div.main
+          div.info
+            h2 Folder: #{folder.name}
+            p Shared by #{folder.owner.name}
+            p Created #{folder.createdAt.toLocaleString()}
+            if folder.files.length === 1
+                p 1 file 
+            else
+                p=`${folder.files.length} files`
+            if folder.files.length 
+                p Total size: #{folder.totalSize}
+                h3 Files:
+                ul.item-list
+                 for file in folder.files 
+                  li
+                    div.file
+                        div.file-name
+                            a(href=`/share/file/${file.shareId}`)=file.name
+                        div.file-size=file.sizeFormatted
+                        div.file-uploadedAt=file.uploadedAt.toLocaleString()
+            a(href='/') Return to front page

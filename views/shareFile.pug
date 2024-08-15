@@ -16,5 +16,8 @@ block content
                 li #[strong Type]: #{file.type}
                 li #[strong Size]: #{file.sizeFormatted}
                 li #[strong Uploaded] #{file.uploadedAt.toLocaleString()}
-            a(href=url) Download
-            a(href='/') Return to front page
+            div.actions(style='display:flex; flex-direction: column; margin-top: 8px')  
+                a(href=url) Download
+                if file.folder && file.folder.shared 
+                    a(href=`/share/folder/${file.folder.shareId}`) Return to folder
+                a(href='/') Return to front page
