@@ -4,7 +4,7 @@
   "private": true,
   "scripts": {
     "start": "node --watch ./bin/www",
-    "create_db": "npx prisma generate && npx prisma migrate deploy"
+    "createdb": "npx prisma generate && npx prisma migrate deploy"
   },
   "dependencies": {
     "@prisma/client": "^5.18.0",
