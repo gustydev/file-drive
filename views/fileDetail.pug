@@ -19,14 +19,13 @@ block content
                    li #[strong Folder]: #[a(href=`/folder/${file.folder.id}`)=file.folder.name]
                 else
                     li #[strong Folder]: none
+            h3(style='margin-top:8px') Actions:
             a(href=url) Download
             a(href=`/file/${file.id}/share`) Share
             form(action=`/file/${file.id}/delete` method='post')
-                label(for="fileId")
                 input(type="hidden" name='fileId' value=file.id)
-                button(type="submit") Delete file
+                button(type="submit").button-to-link Delete
             form(action=`/file/${file.id}/move`, method="post") 
-                label(for="fileId")
                 input(type="hidden" name='fileId' value=file.id)
                 label(for="folder") Move to folder:   
                 select#folder(name="folder" required)
@@ -50,4 +49,6 @@ block content
                     ul 
                         for error in errors 
                             li=error.msg
+            if file.folder 
+                a(href=`/folder/${file.folder.id}`) Return to #{file.folder.name}
             a(href='/') Return to front page

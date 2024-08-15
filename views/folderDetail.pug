@@ -28,7 +28,6 @@ block content
             form(action="/file/upload", method="post" enctype="multipart/form-data")
                 label(for="file") Upload to folder: 
                 input(type="file" name='file' id='file' required)
-                label(for="folder")
                 input(type="hidden" value=folder.id name='folder') 
                 button(type="submit") Submit    
             div.actions(style='display:flex; flex-direction: column;')
